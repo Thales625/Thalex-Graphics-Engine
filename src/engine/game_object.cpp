@@ -1,6 +1,6 @@
-#include "../../include/engine/game_object.hpp"
-#include "../../include/engine/mesh_renderer.hpp"
-#include "../../include/engine/transform.hpp"
+#include "engine/game_object.hpp"
+#include "engine/mesh_renderer.hpp"
+#include "engine/transform.hpp"
 
 #include <memory>
 

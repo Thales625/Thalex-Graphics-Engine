@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../include/engine/transform.hpp"
-#include "../../include/engine/mesh_renderer.hpp"
+#include "engine/transform.hpp"
+#include "engine/mesh_renderer.hpp"
 
 #include <string>
 

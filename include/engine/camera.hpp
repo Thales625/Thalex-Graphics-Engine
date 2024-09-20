@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
 
-#include "../../include/engine/window.hpp"
+#include "engine/window.hpp"
 
 class Camera {
 public:

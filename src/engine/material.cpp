@@ -1,4 +1,4 @@
-#include "../../include/engine/material.hpp"
+#include "engine/material.hpp"
 #include <memory>
 
 Material::Material(std::shared_ptr<Shader> shader, const glm::vec3& color)

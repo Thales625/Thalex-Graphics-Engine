@@ -2,5 +2,8 @@ bin/
 build/
 assets/
 lib/
+.cache/
+
+compile_commands.json
 
 run.sh

@@ -1,4 +1,4 @@
-#include "../../include/engine/mesh.hpp"
+#include "engine/mesh.hpp"
 
 #include <glad/gl.h>
 

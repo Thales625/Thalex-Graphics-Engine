@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "../../include/engine/game_object.hpp"
-#include "../../include/engine/camera.hpp"
+#include "engine/game_object.hpp"
+#include "engine/camera.hpp"
 
 class Scene {
 public:

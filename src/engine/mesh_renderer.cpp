@@ -1,6 +1,6 @@
-#include "../../include/engine/mesh_renderer.hpp"
-#include "../../include/engine/mesh.hpp"
-#include "../../include/engine/material.hpp"
+#include "engine/mesh_renderer.hpp"
+#include "engine/mesh.hpp"
+#include "engine/material.hpp"
 
 #include <glad/gl.h>
 

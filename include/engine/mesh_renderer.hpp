@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "../../include/engine/mesh.hpp"
-#include "../../include/engine/material.hpp"
+#include "engine/mesh.hpp"
+#include "engine/material.hpp"
 
 class MeshRenderer {
 public:

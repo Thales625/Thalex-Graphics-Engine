@@ -1,4 +1,4 @@
-#include "../../include/engine/window.hpp"
+#include "engine/window.hpp"
 
 #include <cstdint>
 #include <iostream>

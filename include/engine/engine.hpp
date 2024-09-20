@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "../../include/engine/scene.hpp"
-#include "../../include/engine/window.hpp"
+#include "engine/scene.hpp"
+#include "engine/window.hpp"
 
 class Engine {
 public:

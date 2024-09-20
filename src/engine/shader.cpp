@@ -1,5 +1,5 @@
-#include "../../include/engine/shader.hpp"
-#include "../../include/utils/utils.hpp"
+#include "engine/shader.hpp"
+#include "utils/utils.hpp"
 
 #include <iostream>
 

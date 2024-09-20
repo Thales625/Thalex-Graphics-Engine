@@ -1,4 +1,4 @@
-#include "../../include/engine/scene.hpp"
+#include "engine/scene.hpp"
 
 #include <iostream>
 

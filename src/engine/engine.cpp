@@ -1,4 +1,4 @@
-#include "../../include/engine/engine.hpp"
+#include "engine/engine.hpp"
 
 #include <glm/ext/vector_float3.hpp>
 #include <iostream>

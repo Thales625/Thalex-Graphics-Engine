@@ -1,5 +1,5 @@
-#include "../../include/engine/camera.hpp"
-#include "../../include/engine/window.hpp"
+#include "engine/camera.hpp"
+#include "engine/window.hpp"
 
 // Constructor
 Camera::Camera(glm::vec3 position, float yaw, float pitch)
