@@ -1,7 +1,5 @@
 #include "engine/scene.hpp"
 
-#include <iostream>
-
 // Constructor
 Scene::Scene(std::shared_ptr<Camera> camera)
     : main_camera(camera) {}
@@ -27,11 +25,8 @@ void Scene::Render(std::unique_ptr<Window>& window) const {
     for (auto& object : game_objects) {
         m_model = glm::translate(glm::mat4(1.0f), object->GetTransform().position);
 
-        std::cout << object->GetTransform().position.x << std::endl;
-
         object->Render(m_model, m_view, m_projection);
     }
-    std::cout << "+++++++++++++++++++++" << std::endl;
 }
 
 glm::mat4 Scene::GetProjectionMatrix(std::unique_ptr<Window>& window) const {

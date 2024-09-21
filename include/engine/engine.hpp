@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "engine/scene.hpp"
 #include "engine/window.hpp"
+#include "engine/scene.hpp"
 
 class Engine {
 public:
@@ -11,10 +11,11 @@ public:
 
     bool Init();
     void Run();
-    void Stop();
-    void Shutdown();
+    void Stop() { running = false; };
+    void Shutdown() { window->Close(); };
 
-    void SetScene(std::shared_ptr<Scene> scene);
+    void SetScene(std::shared_ptr<Scene> new_scene) { scene = new_scene; };
+    std::shared_ptr<Scene> GetScene() const { return scene; };
 
 private:
     std::unique_ptr<Window> window;

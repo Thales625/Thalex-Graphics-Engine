@@ -2,9 +2,10 @@
 #include "engine/window.hpp"
 
 // Constructor
-Camera::Camera(glm::vec3 position, float yaw, float pitch)
-    : position(position), yaw(yaw), pitch(pitch) {
+Camera::Camera(glm::vec3 position, float yaw, float pitch) : position(position), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
+    mouse_sensitivity = 5.0f;
+    camera_speed = 2.5f;
 }
 
 // Get the view matrix for the camera
@@ -14,26 +15,26 @@ glm::mat4 Camera::GetViewMatrix() const {
 
 // Process keyboard input for camera movement
 void Camera::ProcessKeyboardInput(std::unique_ptr<Window>& window, float delta_time) {
-    const float cameraSpeed = 2.5f * delta_time; // Adjust speed as needed
+    const float speed = camera_speed * delta_time;
 
     if (window->GetKey(GLFW_KEY_W, GLFW_PRESS)) {
-        position += front * cameraSpeed;
+        position += front * speed;
     }
     if (window->GetKey(GLFW_KEY_S, GLFW_PRESS)) {
-        position -= front * cameraSpeed;
+        position -= front * speed;
     }
     if (window->GetKey(GLFW_KEY_A, GLFW_PRESS)) {
-        position -= right * cameraSpeed;
+        position -= right * speed;
     }
     if (window->GetKey(GLFW_KEY_D, GLFW_PRESS)) {
-        position += right * cameraSpeed;
+        position += right * speed;
     }
 
     if (window->GetKey(GLFW_KEY_SPACE, GLFW_PRESS)) {
-        position += up * cameraSpeed;
+        position += up * speed;
     }
     if (window->GetKey(GLFW_KEY_C, GLFW_PRESS)) {
-        position -= up * cameraSpeed;
+        position -= up * speed;
     }
 }
 
