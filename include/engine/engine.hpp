@@ -11,7 +11,7 @@ public:
     bool Init();
     void Run();
     void Stop() { running = false; };
-    void Shutdown() { window->Close(); };
+    void Shutdown() const;
 
     void SetScene(Scene* new_scene) { scene = new_scene; };
     Scene* GetScene() const { return scene; };

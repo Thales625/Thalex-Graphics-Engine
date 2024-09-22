@@ -15,6 +15,6 @@ void GameObject::Update(const float delta_time) {
 }
 
 // Render the GameObject
-void GameObject::Render(glm::mat4 m_translate, glm::mat4 m_view, glm::mat4 m_projection) {
-    mesh_renderer.Render(m_translate, m_view, m_projection);
+void GameObject::Render(glm::mat4 m_translate, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir) {
+    mesh_renderer.Render(m_translate, m_view, m_projection, sun_dir);
 }

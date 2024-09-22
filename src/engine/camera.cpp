@@ -1,19 +1,16 @@
 #include "engine/camera.hpp"
 #include "engine/window.hpp"
 
-// Constructor
 Camera::Camera(glm::vec3 position, float yaw, float pitch) : position(position), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
     mouse_sensitivity = 5.0f;
     camera_speed = 5.0f;
 }
 
-// Get the view matrix for the camera
 glm::mat4 Camera::GetViewMatrix() const {
     return glm::lookAt(position, position + front, up);
 }
 
-// Process keyboard input for camera movement
 void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     const float speed = camera_speed * delta_time;
 
@@ -38,7 +35,6 @@ void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     }
 }
 
-// Process mouse movement for camera orientation
 void Camera::ProcessMouseMovement(Window* window, float delta_time) {
     double mouse_x0 = mouse_x;
     double mouse_y0 = mouse_y;
@@ -48,7 +44,7 @@ void Camera::ProcessMouseMovement(Window* window, float delta_time) {
     yaw   += (mouse_x - mouse_x0)*mouse_sensitivity*delta_time;
     pitch -= (mouse_y - mouse_y0)*mouse_sensitivity*delta_time;
 
-    // Constrain pitch, yaw to avoid flipping
+    // clamp pitch
     if (pitch > 89.0f) pitch = 89.0f;
     else if (pitch < -89.0f) pitch = -89.0f;
 
@@ -58,7 +54,6 @@ void Camera::ProcessMouseMovement(Window* window, float delta_time) {
     UpdateCameraVectors();
 }
 
-// Update camera vectors based on yaw and pitch
 void Camera::UpdateCameraVectors() {
     float rad_yaw = glm::radians(yaw);
     float rad_pitch = glm::radians(pitch);
@@ -69,6 +64,6 @@ void Camera::UpdateCameraVectors() {
         sin(rad_yaw) * cos(rad_pitch)
     ));
 
-    right = glm::normalize(glm::cross(front, world_up)); // Normalize the right vector
-    up = glm::normalize(glm::cross(right, front));       // Normalize the up vector
+    right = glm::normalize(glm::cross(front, world_up));
+    up = glm::normalize(glm::cross(right, front));
 }

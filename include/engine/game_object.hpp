@@ -15,17 +15,17 @@ public:
     std::string GetName() const { return name; };
     void SetName(const std::string& new_name) { name = new_name; };
 
-    // Update the GameObject
+    // update the GameObject
     void Update(const float delta_time);
 
-    // Render the GameObject
-    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection);
+    // render the object
+    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir);
 
-    // Transform
+    // transform
     const Transform GetTransform() const { return transform; };
     void SetTransform(const Transform& new_transform) { transform = new_transform; };
 
 private:
-    std::string name;           // Name of the GameObject
-    MeshRenderer mesh_renderer; // Handles the rendering logic
+    std::string name;
+    MeshRenderer mesh_renderer;
 };

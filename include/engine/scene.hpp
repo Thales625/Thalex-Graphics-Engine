@@ -11,6 +11,8 @@ public:
 
     void AddGameObject(GameObject* object);
 
+    glm::vec3 sun_dir;
+
     glm::mat4 GetProjectionMatrix(Window* window) const;
 
     void Render(Window* window) const;

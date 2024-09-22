@@ -8,7 +8,7 @@ public:
     MeshRenderer(Mesh* mesh, Material* material);
 
     // render the mesh
-    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection);
+    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir);
 
     // set the mesh and material
     void SetMesh(Mesh* new_mesh) { mesh = new_mesh; };

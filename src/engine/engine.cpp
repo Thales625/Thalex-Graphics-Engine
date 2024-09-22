@@ -56,22 +56,11 @@ GameObject* LoadObj(const std::string& obj_file_path, const glm::vec3 color) {
             for (int i = 0; i < 3; ++i) {
                 if (iss >> vertexIndex[i] >> separator >> uvIndex[i] >> separator >> normalIndex[i]) {
                     vertices.push_back({positions[vertexIndex[i] - 1], uvs[uvIndex[i] - 1], normals[normalIndex[i] - 1]});
-
                     indices.push_back(vertices.size() - 1);
                 }
             }
         }
     }
-
-    /*
-    for (size_t i=0; i<100; i++) {
-        std::cout << indices[i] << std::endl;
-        std::cout << vertices[i].position.x << " " << vertices[i].position.y << " " << vertices[i].position.z << std::endl;
-        std::cout << vertices[i].normal.x << " " << vertices[i].normal.y << " " << vertices[i].normal.z << std::endl;
-        std::cout << vertices[i].tex_coords.x << " " << vertices[i].tex_coords.y << " " << std::endl;
-        std::cout << "=========================\n"; 
-    }
-    */
     
     file.close();
 
@@ -86,7 +75,10 @@ GameObject* LoadObj(const std::string& obj_file_path, const glm::vec3 color) {
 Engine::Engine(uint32_t width, uint32_t height, const std::string& title) : window(new Window(width, height, title)), scene(nullptr), running(false) {}
 
 // deconstructor
-Engine::~Engine() { std::cout << "ENGINE deconstructor\n"; }
+Engine::~Engine() {
+    Shutdown();
+    delete window;
+}
 
 // init engine (OpenGL, GLFW, etc)
 bool Engine::Init() {
@@ -96,8 +88,27 @@ bool Engine::Init() {
     }
 
     glEnable(GL_DEPTH_TEST);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_STENCIL_TEST);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_MULTISAMPLE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // fill
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST);
 
     return true;
+}
+
+// main loop
+void Engine::Shutdown() const {
+    window->Close();
+    delete window;
 }
 
 // main loop
@@ -108,6 +119,7 @@ void Engine::Run() {
 
     Camera* new_camera = new Camera(glm::vec3(0, 0, 0), 0, 0);
     Scene* new_scene = new Scene(new_camera);
+    // GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/cube.obj", glm::vec3(1, 1, 1));
     GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/suzanne.obj", glm::vec3(1, 1, 1));
     
     new_scene->AddGameObject(new_game_obj);
@@ -121,7 +133,7 @@ void Engine::Run() {
 
         // DEBUG
         //new_game_obj->transform.rotation.x += delta_time; 
-        new_game_obj->transform.rotation.y += delta_time; 
+        // new_game_obj->transform.rotation.y += delta_time; 
 
         window->PollEvents();
 
@@ -129,6 +141,7 @@ void Engine::Run() {
             scene->GetCamera()->ProcessKeyboardInput(window, delta_time);
             scene->GetCamera()->ProcessMouseMovement(window, delta_time);
             scene->Update(delta_time);
+            scene->sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
 
             Render();
         }

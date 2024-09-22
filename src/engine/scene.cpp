@@ -1,9 +1,8 @@
 #include "engine/scene.hpp"
 #include "engine/transform.hpp"
-#include <iostream>
+#include <glm/fwd.hpp>
 
-Scene::Scene(Camera* new_camera)
-    : camera(new_camera) {}
+Scene::Scene(Camera* new_camera) : camera(new_camera) {}
 
 void Scene::AddGameObject(GameObject* object) {
     game_objects.push_back(object);
@@ -11,6 +10,8 @@ void Scene::AddGameObject(GameObject* object) {
 
 // update all objects in the scene
 void Scene::Update(float delta_time) const {
+    // sun_dir += delta_time;
+
     for (auto& object : game_objects) {
         object->Update(delta_time);
     }
@@ -33,7 +34,7 @@ void Scene::Render(Window* window) const {
         m_model = glm::rotate(m_model, transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); // roll
         m_model = glm::scale(m_model, transform.scale);
 
-        object->Render(m_model, m_view, m_projection);
+        object->Render(m_model, m_view, m_projection, sun_dir);
     }
 }
 
