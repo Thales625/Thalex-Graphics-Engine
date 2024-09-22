@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glm/gtc/type_ptr.hpp>
-#include <memory>
 
 #include "engine/window.hpp"
 
@@ -10,8 +9,8 @@ public:
     Camera(glm::vec3 position, float yaw, float pitch);
 
     glm::mat4 GetViewMatrix() const;
-    void ProcessKeyboardInput(std::unique_ptr<Window>& window, float delta_time);
-    void ProcessMouseMovement(std::unique_ptr<Window>& window, float delta_time);
+    void ProcessKeyboardInput(Window* window, float delta_time);
+    void ProcessMouseMovement(Window* window, float delta_time);
 
     float camera_speed, mouse_sensitivity;
 private:

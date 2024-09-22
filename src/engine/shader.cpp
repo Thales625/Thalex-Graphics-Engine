@@ -1,9 +1,8 @@
 #include "engine/shader.hpp"
 #include "utils/utils.hpp"
 
-#include <iostream>
-
 #include <glad/gl.h>
+#include <iostream>
 
 Shader::Shader(const std::string& vertex_path, const std::string& fragment_path) {
     // read the vertex shader source code from file

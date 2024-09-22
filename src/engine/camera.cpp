@@ -5,7 +5,7 @@
 Camera::Camera(glm::vec3 position, float yaw, float pitch) : position(position), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
     mouse_sensitivity = 5.0f;
-    camera_speed = 2.5f;
+    camera_speed = 5.0f;
 }
 
 // Get the view matrix for the camera
@@ -14,7 +14,7 @@ glm::mat4 Camera::GetViewMatrix() const {
 }
 
 // Process keyboard input for camera movement
-void Camera::ProcessKeyboardInput(std::unique_ptr<Window>& window, float delta_time) {
+void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     const float speed = camera_speed * delta_time;
 
     if (window->GetKey(GLFW_KEY_W, GLFW_PRESS)) {
@@ -39,7 +39,7 @@ void Camera::ProcessKeyboardInput(std::unique_ptr<Window>& window, float delta_t
 }
 
 // Process mouse movement for camera orientation
-void Camera::ProcessMouseMovement(std::unique_ptr<Window>& window, float delta_time) {
+void Camera::ProcessMouseMovement(Window* window, float delta_time) {
     double mouse_x0 = mouse_x;
     double mouse_y0 = mouse_y;
 
@@ -49,8 +49,8 @@ void Camera::ProcessMouseMovement(std::unique_ptr<Window>& window, float delta_t
     pitch -= (mouse_y - mouse_y0)*mouse_sensitivity*delta_time;
 
     // Constrain pitch, yaw to avoid flipping
-    if (pitch > 89.0f) pitch -= 89.0f;
-    else if (pitch < -89.0f) pitch = 89.0f;
+    if (pitch > 89.0f) pitch = 89.0f;
+    else if (pitch < -89.0f) pitch = -89.0f;
 
     if (yaw > 360.0f) yaw -= 360.0f;
     else if (yaw < 0.0f) yaw += 360.0f;

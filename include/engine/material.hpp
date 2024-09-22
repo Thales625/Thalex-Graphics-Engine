@@ -1,22 +1,23 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <memory>
 
 #include "engine/shader.hpp"
 
 class Material {
 public:
-    Material(std::shared_ptr<Shader> shader, const glm::vec3& color = glm::vec3(1.0f));
+    Material(Shader* new_shader, const glm::vec3& new_color);
+    ~Material() { std::cout << "Material deconstruct\n"; };
 
     void Use() const;
 
-    void SetShader(std::shared_ptr<Shader> new_shader);
-    void SetColor(const glm::vec3& new_color);
+    glm::vec3 GetColor() const { return color; };
+    void SetColor(const glm::vec3& new_color) { color = new_color; };
 
-    std::shared_ptr<Shader> GetShader() const;
-    glm::vec3 GetColor() const;
+    void SetShader(Shader* new_shader) { shader = new_shader; };
+    Shader* GetShader() { return shader; };
+
 private:
-    std::shared_ptr<Shader> shader;
+    Shader* shader;
     glm::vec3 color;
 };

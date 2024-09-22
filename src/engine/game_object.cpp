@@ -1,24 +1,7 @@
 #include "engine/game_object.hpp"
 #include "engine/mesh_renderer.hpp"
-#include "engine/transform.hpp"
 
-#include <memory>
-
-// Constructor
-GameObject::GameObject(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material) 
-    : name("Unnamed GameObject"),
-    transform(Transform()),
-    mesh_renderer(MeshRenderer(mesh, material)) {}
-
-// Set the name of the GameObject
-void GameObject::SetName(const std::string& name) {
-    this->name = name;
-}
-
-// Get the name of the GameObject
-std::string GameObject::GetName() const {
-    return name;
-}
+GameObject::GameObject(Mesh* mesh, Material* material) : name("Unnamed GameObject"), mesh_renderer(MeshRenderer(mesh, material)) {}
 
 // Update the GameObject
 void GameObject::Update(const float delta_time) {

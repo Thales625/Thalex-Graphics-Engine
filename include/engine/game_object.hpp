@@ -7,14 +7,13 @@
 
 class GameObject {
 public:
-    // Constructor
-    GameObject(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
+    GameObject(Mesh* mesh, Material* material);
+    ~GameObject() { std::cout << "GameObject deconstruct\n"; };
 
-    // Set the name of the GameObject
-    void SetName(const std::string& name);
+    Transform transform; // position, rotation, scale
 
-    // Get the name of the GameObject
-    std::string GetName() const;
+    std::string GetName() const { return name; };
+    void SetName(const std::string& new_name) { name = new_name; };
 
     // Update the GameObject
     void Update(const float delta_time);
@@ -25,10 +24,8 @@ public:
     // Transform
     const Transform GetTransform() const { return transform; };
     void SetTransform(const Transform& new_transform) { transform = new_transform; };
-    void SetPosition(glm::vec3 new_position) {transform.position = new_position; };
 
 private:
     std::string name;           // Name of the GameObject
-    Transform transform;        // Position, rotation, scale
     MeshRenderer mesh_renderer; // Handles the rendering logic
 };

@@ -1,12 +1,14 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 #include <glm/gtc/type_ptr.hpp>
 
 class Shader {
 public:
     Shader(const std::string& vertex_path, const std::string& fragment_path);
+    ~Shader() { std::cout << "Shader deconstruct\n"; };
 
     unsigned int GetProgram() { return m_shaderProgram; }
 

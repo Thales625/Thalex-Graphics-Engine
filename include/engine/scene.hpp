@@ -1,31 +1,27 @@
 #pragma once
 
-#include <memory>
-
 #include "engine/game_object.hpp"
 #include "engine/camera.hpp"
 
+#include <vector>
+
 class Scene {
 public:
-    // Constructor: initializes the scene with a main camera
-    Scene(std::shared_ptr<Camera> camera);
+    Scene(Camera* camera);
 
-    void AddGameObject(std::shared_ptr<GameObject> object);
+    void AddGameObject(GameObject* object);
 
-    glm::mat4 GetProjectionMatrix(std::unique_ptr<Window>& window) const;
+    glm::mat4 GetProjectionMatrix(Window* window) const;
 
-    void SetMainCamera(std::shared_ptr<Camera> camera);
-    std::shared_ptr<Camera> GetMainCamera() const;
+    void Render(Window* window) const;
 
-    // Updates the scene (could involve updating all game objects)
+    void SetCamera(Camera* new_camera) { camera = new_camera; };
+    Camera* GetCamera() const { return camera; };
+
     void Update(const float delta_time) const;
 
-    // Renders the scene by rendering all GameObjects
-    void Render(std::unique_ptr<Window>& window) const;
 private:
-    // Main camera of the scene
-    std::shared_ptr<Camera> main_camera;
+    Camera* camera;
 
-    // List of GameObjects in the scene
-    std::vector<std::shared_ptr<GameObject>> game_objects;
+    std::vector<GameObject*> game_objects;
 };
