@@ -2,7 +2,7 @@
 #include "engine/transform.hpp"
 #include <glm/fwd.hpp>
 
-Scene::Scene(Camera* new_camera) : sun_dir(glm::vec3(0, 1, 0)), camera(new_camera) {}
+Scene::Scene() : sun_dir(glm::vec3(0, 1, 0)) { }
 
 void Scene::AddGameObject(GameObject* object) {
     game_objects.push_back(object);
@@ -22,7 +22,7 @@ void Scene::Render(Window* window) const {
     Transform transform;
 
     glm::mat4 m_model;
-    glm::mat4 m_view = camera->GetViewMatrix();
+    glm::mat4 m_view = camera.GetViewMatrix();
     glm::mat4 m_projection = GetProjectionMatrix(window);
 
     for (auto& object : game_objects) {

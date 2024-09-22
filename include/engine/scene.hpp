@@ -7,7 +7,7 @@
 
 class Scene {
 public:
-    Scene(Camera* camera);
+    Scene();
 
     void AddGameObject(GameObject* object);
 
@@ -17,13 +17,12 @@ public:
 
     void Render(Window* window) const;
 
-    void SetCamera(Camera* new_camera) { camera = new_camera; };
-    Camera* GetCamera() const { return camera; };
-
     void Update(const float delta_time) const;
 
+    Camera* GetCamera() { return &camera; };
+
 private:
-    Camera* camera;
+    Camera camera;
 
     std::vector<GameObject*> game_objects;
 };

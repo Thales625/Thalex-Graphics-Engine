@@ -114,10 +114,12 @@ GameObject* LoadObj(const std::string& obj_file_path, const std::string& texture
 }
 
 // constructor
-Engine::Engine(uint32_t width, uint32_t height, const std::string& title) : window(new Window(width, height, title)), scene(nullptr), running(false) {}
+Engine::Engine(uint32_t width, uint32_t height, const std::string& title) : window(new Window(width, height, title)) {}
 
 // deconstructor
-Engine::~Engine() { Shutdown(); }
+Engine::~Engine() {
+    delete window;
+}
 
 // init engine (OpenGL, GLFW, etc)
 bool Engine::Init() {
@@ -144,66 +146,46 @@ bool Engine::Init() {
     return true;
 }
 
-// main loop
-void Engine::Shutdown() const {
-    window->Close();
-    delete window;
-    glfwTerminate();
-}
+/*
+TODO
+Engine add a vector for Mesh (LoadObj save in this vector)
+    LoadObj search in this vector first
+
+LoadObj receive a name, e.g starship -> starship.obj and starship.png/jpg
+    search .obj and .image from name
+
+Delete new objects in LoadObj
+*/
 
 // main loop
 void Engine::Run() {
-    running = true;
-
     float last_time = 0.0f;
 
-    Camera new_camera = Camera();
-    Scene new_scene = Scene(&new_camera);
-    // GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/starship.obj", "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/starship.png", glm::vec3(1, 1, 1));
     GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.obj", "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.jpg", glm::vec3(1, 1, 1));
-    // GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/penguin.obj", "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/penguin.png", glm::vec3(1, 1, 1));
-    // GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/suzanne.obj", glm::vec3(1, 1, 1));
 
-    /*
-    TODO
-    Engine add a vector for Mesh (LoadObj save in this vector)
-        LoadObj search in this vector first
+    scene.AddGameObject(new_game_obj);
 
-    LoadObj receive a name, e.g starship -> starship.obj and starship.png/jpg
-        search .obj and .image from name
-    */
-
-    // new_game_obj->transform.scale = glm::vec3(0.1f); 
-    
-    new_scene.AddGameObject(new_game_obj);
-
-    SetScene(&new_scene);
-
-    while (running && !window->ShouldClose()) {
+    while (!window->GetShouldClose()) {
         current_time = static_cast<float>(glfwGetTime());
         delta_time = current_time - last_time;
         last_time = current_time;
 
         window->PollEvents();
 
-        if (scene) {
-            scene->GetCamera()->ProcessKeyboardInput(window, delta_time);
-            scene->GetCamera()->ProcessMouseMovement(window, delta_time);
-            scene->Update(delta_time);
-            // scene->sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
+        scene.GetCamera()->ProcessKeyboardInput(window, delta_time);
+        scene.GetCamera()->ProcessMouseMovement(window, delta_time);
+        scene.Update(delta_time);
+        // scene.sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
 
-            Render();
-        }
+        Render();
 
         window->SwapBuffers();
     }
-
-    Shutdown();
 }
 
 // render scene
 void Engine::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scene->Render(window);
+    scene.Render(window);
 }

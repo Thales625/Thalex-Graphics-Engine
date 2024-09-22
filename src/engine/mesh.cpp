@@ -3,11 +3,8 @@
 #include <glad/gl.h>
 #include <glm/fwd.hpp>
 
-#include <iostream>
-
 // destructor: delete buffers
 Mesh::~Mesh() {
-    std::cout << "Mesh deconstruct\n";
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }

@@ -7,7 +7,6 @@
 class Material {
 public:
     Material(Shader* new_shader, const glm::vec3& new_color, const unsigned int new_texture_id);
-    ~Material() { std::cout << "Material deconstruct\n"; };
 
     void Use() const;
 

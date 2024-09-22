@@ -14,6 +14,7 @@ glm::mat4 Camera::GetViewMatrix() const {
 }
 
 void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
+    // movement
     const float speed = camera_speed * delta_time;
 
     if (window->GetKey(GLFW_KEY_W, GLFW_PRESS)) {
@@ -34,6 +35,11 @@ void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     }
     if (window->GetKey(GLFW_KEY_C, GLFW_PRESS)) {
         position -= world_up * speed;
+    }
+
+    // others
+    if (window->GetKey(GLFW_KEY_Q, GLFW_PRESS)) {
+        window->SetShouldClose(true);
     }
 }
 

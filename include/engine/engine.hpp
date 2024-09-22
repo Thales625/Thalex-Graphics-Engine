@@ -8,21 +8,14 @@ public:
     Engine(uint32_t width, uint32_t height, const std::string& title);
     ~Engine();
 
+    float current_time, delta_time;
+
     bool Init();
     void Run();
-    void Stop() { running = false; };
-    void Shutdown() const;
-
-    void SetScene(Scene* new_scene) { scene = new_scene; };
-    Scene* GetScene() const { return scene; };
 
 private:
     Window* window;
-    Scene* scene;
-
-    bool running;
-
-    float current_time, delta_time;
+    Scene scene;
 
     void ProcessInput();
 

@@ -8,7 +8,6 @@
 class GameObject {
 public:
     GameObject(Mesh* mesh, Material* material);
-    ~GameObject() { std::cout << "GameObject deconstruct\n"; };
 
     Transform transform; // position, rotation, scale
 

@@ -49,9 +49,6 @@ Após a construção, você pode executar o aplicativo localizado em `./bin/app`
 
 ## ToDo
 
-- **Camera:**
-  - **Mover** os parâmetros de dentro da função *ProcessKeyboardInput* para *attrib* em *camera.cpp*:
-
 ## Contribuição
 
 Contribuições são bem-vindas! Se você quiser ajudar a melhorar a ThaleX Graphics Engine, por favor, faça um fork do repositório e envie um pull request com suas melhorias ou correções.
