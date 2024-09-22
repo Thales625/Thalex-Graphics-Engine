@@ -1,17 +1,16 @@
 #include "engine/scene.hpp"
 #include "engine/transform.hpp"
+
 #include <glm/fwd.hpp>
 
 Scene::Scene() : sun_dir(glm::vec3(0, 1, 0)) { }
-
-void Scene::AddGameObject(GameObject* object) {
-    game_objects.push_back(object);
-}
 
 // update all objects in the scene
 void Scene::Update(float delta_time) const {
     // sun_dir += delta_time;
 
+
+    // update each object
     for (auto& object : game_objects) {
         object->Update(delta_time);
     }

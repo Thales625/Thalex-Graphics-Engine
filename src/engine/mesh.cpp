@@ -3,18 +3,17 @@
 #include <glad/gl.h>
 #include <glm/fwd.hpp>
 
-// destructor: delete buffers
 Mesh::~Mesh() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
-// Bind the VAO
+// bind VAO
 void Mesh::Bind() const {
     glBindVertexArray(VAO);
 }
 
-// Unbind the VAO
+// unbind VAO
 void Mesh::Unbind() const {
     glBindVertexArray(0);
 }
@@ -30,11 +29,11 @@ void Mesh::SetupMesh() {
 
     // bind and load data into VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO); 
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
     // bind and load data into EBO
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); 
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     // specify position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
@@ -51,4 +50,28 @@ void Mesh::SetupMesh() {
     // unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0);
+}
+
+
+void Mesh::Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir) {
+    // shader
+    shader.Use();
+
+    // texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    shader.SetUniform("texture1", 0);
+
+    // vec3
+    shader.SetUniform("sun_dir", sun_dir);
+
+    // mat4
+    shader.SetUniform("model", m_model);
+    shader.SetUniform("view", m_view);
+    shader.SetUniform("projection", m_projection);
+
+    // draw
+    Bind();
+    glDrawElements(GL_TRIANGLES, GetCount(), GL_UNSIGNED_INT, 0);
+    Unbind();
 }

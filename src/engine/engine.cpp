@@ -1,123 +1,33 @@
 #include "engine/engine.hpp"
 #include "engine/game_object.hpp"
+#include "engine/mesh.hpp"
+#include "utils/utils.hpp"
 
+#include <cstdlib>
 #include <iostream>
-#include <fstream>
 #include <ostream>
-#include <sstream>
 #include <string>
 #include <vector>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
 #define VERTEX_SHADER_FILE "shaders/vertex.glsl"
 #define FRAGMENT_SHADER_FILE "shaders/fragment.glsl"
-
-unsigned int LoadTexture(const std::string& texture_path) {
-    unsigned int textureID;
-    int width, height, nrChannels;
-
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    
-    // load image
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load(texture_path.c_str(), &width, &height, &nrChannels, 0);
-    
-    if (data) {
-        GLenum format;
-        if (nrChannels == 1)
-            format = GL_RED;
-        else if (nrChannels == 3)
-            format = GL_RGB;
-        else // nrChannels == 4
-            format = GL_RGBA;
-
-        // load texture
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        std::cout << "Loaded texture: " << texture_path << std::endl;
-    } else {
-        std::cerr << "Failed to load texture: " << texture_path << std::endl;
-    }
-
-    stbi_image_free(data);
-
-    return textureID;
-}
-
-GameObject* LoadObj(const std::string& obj_file_path, const std::string& texture_path, const glm::vec3 color) {
-    std::vector<glm::vec3> positions;
-    std::vector<glm::vec2> uvs;
-    std::vector<glm::vec3> normals; 
-    std::vector<Mesh::Vertex> vertices;
-    std::vector<unsigned int> indices;
-
-    std::ifstream file(obj_file_path);
-    
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << obj_file_path << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    std::string line;
-    while (std::getline(file, line)) {
-        if (line.substr(0, 2) == "v ") { // position
-            glm::vec3 position;
-            std::istringstream iss(line.substr(2));
-            if (iss >> position.x >> position.y >> position.z) {
-                positions.push_back(position);
-            }
-        }
-        else if (line.substr(0, 3) == "vt ") { // UV
-            glm::vec2 uv;
-            std::istringstream iss(line.substr(3));
-            if (iss >> uv.x >> uv.y) {
-                uvs.push_back(uv);
-            }
-        }
-        else if (line.substr(0, 3) == "vn ") { // normal
-            glm::vec3 normal;
-            std::istringstream iss(line.substr(3));
-            if (iss >> normal.x >> normal.y >> normal.z) {
-                normals.push_back(normal);
-            }
-        }
-        else if (line.substr(0, 2) == "f ") { // face
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            std::istringstream iss(line.substr(2));
-
-            char separator;
-            for (int i = 0; i < 3; ++i) {
-                if (iss >> vertexIndex[i] >> separator >> uvIndex[i] >> separator >> normalIndex[i]) {
-                    vertices.push_back({positions[vertexIndex[i] - 1], uvs[uvIndex[i] - 1], normals[normalIndex[i] - 1]});
-                    indices.push_back(vertices.size() - 1);
-                }
-            }
-        }
-    }
-    
-    file.close();
-
-    Mesh* mesh = new Mesh(vertices, indices);
-    Shader* shader = new Shader(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
-    Material* material = new Material(shader, color, LoadTexture(texture_path));
-    
-    return new GameObject(mesh, material);
-}
 
 // constructor
 Engine::Engine(uint32_t width, uint32_t height, const std::string& title) : window(new Window(width, height, title)) {}
 
 // deconstructor
 Engine::~Engine() {
+    // free gameobjects
+    for (auto& object : scene.GetGameObjects()) {
+        delete object;
+    }
+    
+    // free meshs
+    for (auto& mesh : GetMeshes()) {
+        delete mesh;
+    }
+
+    // free window
     delete window;
 }
 
@@ -148,7 +58,7 @@ bool Engine::Init() {
 
 /*
 TODO
-Engine add a vector for Mesh (LoadObj save in this vector)
+Engine add a vector for MeshRenderer (LoadObj save in this vector)
     LoadObj search in this vector first
 
 LoadObj receive a name, e.g starship -> starship.obj and starship.png/jpg
@@ -157,13 +67,34 @@ LoadObj receive a name, e.g starship -> starship.obj and starship.png/jpg
 Delete new objects in LoadObj
 */
 
+Mesh* Engine::LoadMesh(const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path) {
+    // TODO: check if mesh is loaded
+
+    unsigned int texture_id = LoadTexture(texture_path);
+
+    std::vector<Mesh::Vertex> vertices_array;
+    std::vector<unsigned int> indices_array;
+    if (!LoadObj(obj_file_path, vertices_array, indices_array)) {
+        std::cerr << "Failed to open file: " << obj_file_path << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    Mesh* new_mesh = new Mesh(vertices_array, indices_array, vertex_shader_path, fragment_shader_path, texture_id);
+
+    meshes.push_back(new_mesh);
+
+    return new_mesh;
+}
+
 // main loop
 void Engine::Run() {
     float last_time = 0.0f;
 
-    GameObject* new_game_obj = LoadObj("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.obj", "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.jpg", glm::vec3(1, 1, 1));
+    Mesh* mesh_1 = LoadMesh("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.jpg");
+    Mesh* mesh_2 = LoadMesh("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/starship.png");
 
-    scene.AddGameObject(new_game_obj);
+    GameObject* new_game_obj = scene.AddGameObject(new GameObject(mesh_1));
+    scene.AddGameObject(new GameObject(mesh_2));
 
     while (!window->GetShouldClose()) {
         current_time = static_cast<float>(glfwGetTime());
@@ -175,7 +106,8 @@ void Engine::Run() {
         scene.GetCamera()->ProcessKeyboardInput(window, delta_time);
         scene.GetCamera()->ProcessMouseMovement(window, delta_time);
         scene.Update(delta_time);
-        // scene.sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
+        scene.sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
+        new_game_obj->transform.position = glm::vec3(0, 0, current_time);
 
         Render();
 

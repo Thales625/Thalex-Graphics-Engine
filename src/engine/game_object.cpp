@@ -1,7 +1,6 @@
 #include "engine/game_object.hpp"
-#include "engine/mesh_renderer.hpp"
 
-GameObject::GameObject(Mesh* mesh, Material* material) : name("Unnamed GameObject"), mesh_renderer(MeshRenderer(mesh, material)) {}
+GameObject::GameObject(Mesh* mesh_ptr) : name("Unnamed GameObject"), mesh(mesh_ptr) {}
 
 // Update the GameObject
 void GameObject::Update(const float delta_time) {
@@ -15,6 +14,6 @@ void GameObject::Update(const float delta_time) {
 }
 
 // Render the GameObject
-void GameObject::Render(glm::mat4 m_translate, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir) {
-    mesh_renderer.Render(m_translate, m_view, m_projection, sun_dir);
+void GameObject::Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir) {
+    mesh->Render(m_model, m_view, m_projection, sun_dir);
 }

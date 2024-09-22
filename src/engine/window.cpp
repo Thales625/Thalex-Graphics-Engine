@@ -15,6 +15,7 @@ bool Window::Init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
 
+    // create window
     glfw_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (!glfw_window) {
         std::cerr << "Failed to create GLFW window!" << std::endl;

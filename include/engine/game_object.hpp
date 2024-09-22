@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/transform.hpp"
-#include "engine/mesh_renderer.hpp"
+#include "engine/mesh.hpp"
 
 #include <string>
 
 class GameObject {
 public:
-    GameObject(Mesh* mesh, Material* material);
+    GameObject(Mesh* mesh_ptr);
 
     Transform transform; // position, rotation, scale
 
@@ -26,5 +26,5 @@ public:
 
 private:
     std::string name;
-    MeshRenderer mesh_renderer;
+    Mesh* mesh;
 };

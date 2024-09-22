@@ -6,11 +6,11 @@
 
 Shader::Shader(const std::string& vertex_path, const std::string& fragment_path) {
     // read the vertex shader source code from file
-    std::string vertexCode = readFile(vertex_path);
+    std::string vertexCode = ReadFile(vertex_path);
     const char* vertexSource = vertexCode.c_str();
 
     // read the fragment shader source code from file
-    std::string fragmentCode = readFile(fragment_path);
+    std::string fragmentCode = ReadFile(fragment_path);
     const char* fragmentSource = fragmentCode.c_str();
 
     // create a vertex shader
