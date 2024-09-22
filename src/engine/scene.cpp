@@ -2,7 +2,7 @@
 #include "engine/transform.hpp"
 #include <glm/fwd.hpp>
 
-Scene::Scene(Camera* new_camera) : camera(new_camera) {}
+Scene::Scene(Camera* new_camera) : sun_dir(glm::vec3(0, 1, 0)), camera(new_camera) {}
 
 void Scene::AddGameObject(GameObject* object) {
     game_objects.push_back(object);

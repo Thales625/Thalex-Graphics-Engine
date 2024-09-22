@@ -6,13 +6,15 @@
 
 class Camera {
 public:
+    Camera();
     Camera(glm::vec3 position, float yaw, float pitch);
 
     glm::mat4 GetViewMatrix() const;
     void ProcessKeyboardInput(Window* window, float delta_time);
     void ProcessMouseMovement(Window* window, float delta_time);
 
-    float camera_speed, mouse_sensitivity;
+    float mouse_sensitivity = 5.0f;
+    float camera_speed = 5.0f;
 private:
     glm::vec3 position, front, up, right;
 

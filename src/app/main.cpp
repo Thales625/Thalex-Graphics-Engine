@@ -3,10 +3,8 @@
 int main() {
     Engine engine = Engine(800, 600, "ThaleX Graphics Engine");
 
-    engine.Init();
-    engine.Run();
-
-    glfwTerminate();
+    if (engine.Init())
+        engine.Run();
 
     return 0;
 }

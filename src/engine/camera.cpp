@@ -1,10 +1,12 @@
 #include "engine/camera.hpp"
 #include "engine/window.hpp"
 
+Camera::Camera() : position(glm::vec3(0)), yaw(0), pitch(0) {
+    UpdateCameraVectors();
+}
+
 Camera::Camera(glm::vec3 position, float yaw, float pitch) : position(position), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
-    mouse_sensitivity = 5.0f;
-    camera_speed = 5.0f;
 }
 
 glm::mat4 Camera::GetViewMatrix() const {
@@ -28,10 +30,10 @@ void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     }
 
     if (window->GetKey(GLFW_KEY_SPACE, GLFW_PRESS)) {
-        position += up * speed;
+        position += world_up * speed;
     }
     if (window->GetKey(GLFW_KEY_C, GLFW_PRESS)) {
-        position -= up * speed;
+        position -= world_up * speed;
     }
 }
 
