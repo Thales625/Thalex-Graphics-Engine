@@ -67,34 +67,47 @@ LoadObj receive a name, e.g starship -> starship.obj and starship.png/jpg
 Delete new objects in LoadObj
 */
 
-Mesh* Engine::LoadMesh(const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path) {
+bool Engine::LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path) {
     // TODO: check if mesh is loaded
 
+    // texture
     unsigned int texture_id = LoadTexture(texture_path);
 
-    std::vector<Mesh::Vertex> vertices_array;
-    std::vector<unsigned int> indices_array;
-    if (!LoadObj(obj_file_path, vertices_array, indices_array)) {
-        std::cerr << "Failed to open file: " << obj_file_path << std::endl;
-        exit(EXIT_FAILURE);
+    if (texture_id) {
+        std::cout << "Loaded texture: " << texture_path << std::endl;
+    } else {
+        std::cerr << "Failed to load texture: " << texture_path << std::endl;
+        return false;
     }
 
-    Mesh* new_mesh = new Mesh(vertices_array, indices_array, vertex_shader_path, fragment_shader_path, texture_id);
+    // object
+    std::vector<Mesh::Vertex> vertices_array;
+    std::vector<unsigned int> indices_array;
 
-    meshes.push_back(new_mesh);
+    if (LoadObj(obj_file_path, vertices_array, indices_array)) {
+        std::cout << "Loaded object: " << obj_file_path << std::endl;
+    } else {
+        std::cerr << "Failed to load object: " << obj_file_path << std::endl;
+        return false;
+    }
 
-    return new_mesh;
+    // create new mesh
+    mesh_ptr = new Mesh(vertices_array, indices_array, vertex_shader_path, fragment_shader_path, texture_id);
+
+    meshes.push_back(mesh_ptr);
+
+    return true;
 }
 
 // main loop
 void Engine::Run() {
     float last_time = 0.0f;
 
-    Mesh* mesh_1 = LoadMesh("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.jpg");
-    Mesh* mesh_2 = LoadMesh("/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/starship.png");
+    Mesh* mesh_1;
+    if (!LoadMesh(mesh_1, "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Dropbox/Codes/Cpp/OpenGL/TGE/assets/jeep.jpg")) return;
 
     GameObject* new_game_obj = scene.AddGameObject(new GameObject(mesh_1));
-    scene.AddGameObject(new GameObject(mesh_2));
+    // scene.AddGameObject(new GameObject(mesh_2));
 
     while (!window->GetShouldClose()) {
         current_time = static_cast<float>(glfwGetTime());

@@ -1,5 +1,6 @@
 #include "utils/utils.hpp"
 
+#include <cstdlib>
 #include <glad/gl.h>
 
 #include <iostream>
@@ -48,10 +49,6 @@ unsigned int LoadTexture(const std::string& texture_path) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        std::cout << "Loaded texture: " << texture_path << std::endl;
-    } else {
-        std::cerr << "Failed to load texture: " << texture_path << std::endl;
     }
 
     stbi_image_free(data);
@@ -67,7 +64,7 @@ bool LoadObj(const std::string& obj_file_path, std::vector<Mesh::Vertex>& vertic
     std::ifstream file(obj_file_path);
     
     if (!file.is_open()) {
-        return true;
+        return false;
     }
 
     std::string line;

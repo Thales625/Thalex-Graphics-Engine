@@ -13,7 +13,7 @@ public:
     bool Init();
     void Run();
 
-    Mesh* LoadMesh(const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path);
+    bool LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path);
 
     std::vector<Mesh*> GetMeshes() const { return meshes; };
 
