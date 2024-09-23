@@ -20,7 +20,7 @@ void main()
     float diff = max(dot(norm, light_dir), 0.2);
 
     // texture color
-    vec4 texColor = texture(texture1, tex_coord) + vec4(color.rgb, 0); // with texture
+    vec4 texColor = texture(texture1, tex_coord) + vec4(color.rgb, 0);
 
     vec3 result = texColor.rgb * diff;
 

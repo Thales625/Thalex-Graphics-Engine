@@ -25,8 +25,6 @@ OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 OBJ_FILES += $(LIB_C_FILES:$(LIB_DIR)/%.c=$(BUILD_DIR)/lib/%.o)
 OBJ_FILES += $(LIB_CPP_FILES:$(LIB_DIR)/%.cpp=$(BUILD_DIR)/lib/%.o)
 
-all: $(TARGET)
-
 # out rule
 $(TARGET): $(OBJ_FILES)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ_FILES) $(LDFLAGS)
@@ -43,7 +41,20 @@ $(BUILD_DIR)/lib/%.o: $(LIB_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-clean:
-	rm -f $(BUILD_DIR)/**/*.o $(TARGET)
+all: $(TARGET)
 
-.PHONY: all clean
+run: $(TARGET)
+	./$(TARGET)
+
+refresh: clean run
+
+clean:
+	rm -rf $(BUILD_DIR)/* $(TARGET)
+
+valgrind: $(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all $(TARGET)
+
+valgrind_extreme: $(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all --leak-resolution=high --track-origins=yes --vgdb=yes $(TARGET)
+
+.PHONY: all run refresh clean valgrind valgrind_extreme
