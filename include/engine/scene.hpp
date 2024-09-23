@@ -15,7 +15,7 @@ public:
 
     void Render(Window* window) const;
 
-    void Update(const float delta_time) const;
+    void Update(const float delta_time, const float current_time);
 
     GameObject* AddGameObject(GameObject* game_obj_ptr) { game_objects.push_back(game_obj_ptr); return game_obj_ptr; };
     std::vector<GameObject*> GetGameObjects() const { return game_objects; };

@@ -5,7 +5,11 @@ Camera::Camera() : position(glm::vec3(0)), yaw(0), pitch(0) {
     UpdateCameraVectors();
 }
 
-Camera::Camera(glm::vec3 position, float yaw, float pitch) : position(position), yaw(yaw), pitch(pitch) {
+Camera::Camera(glm::vec3 new_pos) : position(new_pos), yaw(0), pitch(0) {
+    UpdateCameraVectors();
+}
+
+Camera::Camera(glm::vec3 new_pos, float yaw, float pitch) : position(new_pos), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
 }
 

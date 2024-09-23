@@ -13,24 +13,22 @@ public:
         glm::vec3 normal;
     };
 
-    Mesh(const std::vector<Vertex> &vertex_array, const std::vector<unsigned int> &index_array, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const unsigned int texture_id) : vertices(vertex_array), indices(index_array), shader(Shader(vertex_shader_path, fragment_shader_path)), texture_id(texture_id) { SetupMesh(); }
-    ~Mesh();
+    unsigned int VAO, VBO, EBO;
 
-    unsigned int GetCount() { return static_cast<unsigned int>(indices.size()); };
+    Mesh(const std::vector<Vertex> &vertex_array, const std::vector<unsigned int> &index_array, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const unsigned int texture_id = 0);
+    ~Mesh();
 
     void Bind() const;
     void Unbind() const;
 
-    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir);
+    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir, glm::vec3 color);
 
-    unsigned int VAO, VBO, EBO;
+    unsigned int GetShaderProgram() { return shader.GetProgram(); }; 
 
 private:
-    std::vector<Mesh::Vertex> vertices;
-    std::vector<unsigned int> indices;
-
     Shader shader;
     unsigned int texture_id;
+    unsigned int elements_count;
 
     void SetupMesh();
 };

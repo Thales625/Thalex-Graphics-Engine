@@ -12,18 +12,15 @@ uniform sampler2D texture1;
 
 void main()
 {
-    //FragColor = vec4(color * dot(normal, sun_dir), 1.0);
-    //FragColor = texture(texture1, tex_coord);
-
     // normalize
     vec3 norm = normalize(normal);
     vec3 light_dir = normalize(sun_dir);
 
     // light intensity
-    float diff = max(dot(norm, light_dir), 0.1);
+    float diff = max(dot(norm, light_dir), 0.2);
 
     // texture color
-    vec4 texColor = texture(texture1, tex_coord);
+    vec4 texColor = texture(texture1, tex_coord) + vec4(color.rgb, 0); // with texture
 
     vec3 result = texColor.rgb * diff;
 

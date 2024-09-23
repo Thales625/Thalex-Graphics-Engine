@@ -3,16 +3,16 @@
 
 #include <glm/fwd.hpp>
 
-Scene::Scene() : sun_dir(glm::vec3(0, 1, 0)) { }
+Scene::Scene() : sun_dir({0, 1, 0}) { }
 
 // update all objects in the scene
-void Scene::Update(float delta_time) const {
-    // sun_dir += delta_time;
-
+void Scene::Update(const float delta_time, const float current_time) {
+    // sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
+    sun_dir = glm::normalize(glm::vec3(0, 2+glm::cos(current_time), glm::sin(current_time)));
 
     // update each object
     for (auto& object : game_objects) {
-        object->Update(delta_time);
+        object->Update(delta_time, current_time);
     }
 } 
 
@@ -25,13 +25,11 @@ void Scene::Render(Window* window) const {
     glm::mat4 m_projection = GetProjectionMatrix(window);
 
     for (auto& object : game_objects) {
-        transform = object->GetTransform();
-
-        m_model = glm::translate(glm::mat4(1.0f), transform.position);
-        m_model = glm::rotate(m_model, transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); // yaw
-        m_model = glm::rotate(m_model, transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // pitch
-        m_model = glm::rotate(m_model, transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); // roll
-        m_model = glm::scale(m_model, transform.scale);
+        m_model = glm::translate(glm::mat4(1.0f), object->transform.position);
+        m_model = glm::rotate(m_model, object->transform.rotation.y, {0.0f, 1.0f, 0.0f}); // yaw
+        m_model = glm::rotate(m_model, object->transform.rotation.x, {1.0f, 0.0f, 0.0f}); // pitch
+        m_model = glm::rotate(m_model, object->transform.rotation.z, {0.0f, 0.0f, 1.0f}); // roll
+        m_model = glm::scale(m_model, object->transform.scale);
 
         object->Render(m_model, m_view, m_projection, sun_dir);
     }
