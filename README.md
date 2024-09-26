@@ -18,7 +18,7 @@ Para começar a usar o ThaleX Graphics Engine, você precisa ter o [CMake](https
 
 1. Clone o repositório:
    ```sh
-   git clone https://github.com/usuario/thalex-graphics-engine.git
+   git clone https://github.com/Thales625/Thalex-Graphics-Engine.git
    cd thalex-graphics-engine
    ```
 
