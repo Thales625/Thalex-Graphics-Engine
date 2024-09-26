@@ -8,7 +8,7 @@ class Shader {
 public:
     Shader(const std::string& vertex_path, const std::string& fragment_path);
 
-    unsigned int GetProgram() { return m_shaderProgram; }
+    unsigned int GetProgram() { return shader_program; }
 
     void SetUniform(const std::string name, const glm::vec3 value);
     void SetUniform(const std::string name, const glm::mat4 value);
@@ -16,5 +16,5 @@ public:
 
     void Use();
 private:
-    unsigned int m_shaderProgram;
+    unsigned int shader_program;
 };

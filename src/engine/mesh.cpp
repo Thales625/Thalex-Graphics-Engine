@@ -55,7 +55,6 @@ void Mesh::Unbind() const {
     glBindVertexArray(0);
 }
 
-
 void Mesh::Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir, glm::vec3 color) {
     // shader
     shader.Use();
