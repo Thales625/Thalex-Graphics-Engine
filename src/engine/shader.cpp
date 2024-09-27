@@ -1,7 +1,7 @@
 #include "engine/shader.hpp"
 #include "utils/utils.hpp"
 
-#include <glad/gl.h>
+#include "glad/glad.h"
 #include <iostream>
 
 Shader::Shader(const std::string& vertex_path, const std::string& fragment_path) {

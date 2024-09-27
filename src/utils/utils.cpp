@@ -9,7 +9,7 @@
 #include <ostream>
 #include <string>
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "utils/stb_image.h"
 
 std::string ReadFile(const std::string& filePath) {
     std::ifstream file(filePath);

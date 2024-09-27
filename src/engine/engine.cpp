@@ -128,16 +128,16 @@ void Engine::Run() {
 
     // load meshes
     Mesh* mesh_jeep;
-    if (!LoadMesh(mesh_jeep, "/home/thales/Codes/www/TGE/assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Codes/www/TGE/assets/jeep.jpg")) return;
+    if (!LoadMesh(mesh_jeep, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/jeep.jpg")) return;
 
     Mesh* mesh_starship;
-    if (!LoadMesh(mesh_starship, "/home/thales/Codes/www/TGE/assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Codes/www/TGE/assets/starship.png")) return;
+    if (!LoadMesh(mesh_starship, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/starship.png")) return;
 
     Mesh* mesh_cube;
-    if (!LoadMesh(mesh_cube, "/home/thales/Codes/www/TGE/assets/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!LoadMesh(mesh_cube, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     Mesh* mesh_suzanne;
-    if (!LoadMesh(mesh_suzanne, "/home/thales/Codes/www/TGE/assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!LoadMesh(mesh_suzanne, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // create objects
     GameObject* jeep = scene.AddGameObject(new GameObject(mesh_jeep));
