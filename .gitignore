@@ -1,7 +1,6 @@
 bin/
 build/
-assets/
-lib/
 .cache/
+assets/
 
 compile_commands.json
