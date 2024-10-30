@@ -10,8 +10,9 @@
 #include <string>
 #include <vector>
 
-#define VERTEX_SHADER_FILE "shaders/vertex.glsl"
+//#define WIREFRAME
 
+#define VERTEX_SHADER_FILE "shaders/vertex.glsl"
 #define FRAGMENT_SHADER_FILE "shaders/fragment.glsl"
 #define FRAGMENT_NO_TEX_SHADER_FILE "shaders/fragment_no_tex.glsl"
 
@@ -51,22 +52,16 @@ bool Engine::Init() {
     glClearDepth(1.0f);
     glDepthFunc(GL_LESS);
     glEnable(GL_MULTISAMPLE);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+	#ifdef WIREFRAME
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+	#else
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // fill
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST);
+	#endif
 
     return true;
 }
-
-/*
-TODO
-Engine add a vector for MeshRenderer (LoadObj save in this vector)
-    LoadObj search in this vector first
-
-LoadObj receive a name, e.g starship -> starship.obj and starship.png/jpg
-    search .obj and .image from name
-*/
 
 bool Engine::LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path) {
     // TODO: check if mesh is loaded -> model loader
@@ -128,19 +123,27 @@ void Engine::Run() {
 
     // load meshes
     Mesh* mesh_jeep;
-    if (!LoadMesh(mesh_jeep, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/jeep.jpg")) return;
+    if (!LoadMesh(mesh_jeep, "./assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/jeep.jpg")) return;
 
     Mesh* mesh_starship;
-    if (!LoadMesh(mesh_starship, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/starship.png")) return;
+    if (!LoadMesh(mesh_starship, "./assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/starship.png")) return;
 
     Mesh* mesh_cube;
-    if (!LoadMesh(mesh_cube, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!LoadMesh(mesh_cube, "./assets/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     Mesh* mesh_suzanne;
-    if (!LoadMesh(mesh_suzanne, "/home/thales/Codes/www/Thalex-Graphics-Engine/assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!LoadMesh(mesh_suzanne, "./assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+
+    Mesh* mesh_raptor;
+    if (!LoadMesh(mesh_raptor, "./assets/raptor.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+
+    Mesh* mesh_tank;
+    if (!LoadMesh(mesh_tank, "./assets/tank.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // create objects
     GameObject* jeep = scene.AddGameObject(new GameObject(mesh_jeep));
+    GameObject* raptor = scene.AddGameObject(new GameObject(mesh_raptor, {125, 125, 125}));
+    GameObject* tank = scene.AddGameObject(new GameObject(mesh_tank, {125, 125, 125}));
     GameObject* starship = scene.AddGameObject(new GameObject(mesh_starship));
     GameObject* suzanne = scene.AddGameObject(new GameObject(mesh_suzanne, {0.5f, 0, 0.4f}));
     GameObject* ground = scene.AddGameObject(new GameObject(mesh_cube, {0.3f, 0.3f, 0.3f}));
@@ -148,6 +151,12 @@ void Engine::Run() {
     // transform
     jeep->transform.position = {40.0f, 0.15f, 0};
     jeep->transform.rotation = {0, glm::pi<float>() * 0.2f, 0};
+
+    raptor->transform.position = {20.0f, 1.0f, 0};
+    raptor->transform.rotation = {0, 0, glm::pi<float>()};
+
+    tank->transform.position = {20.0f, 1.2f, 0};
+    tank->transform.rotation = {0, 0, 0};
 
     starship->transform.scale = glm::vec3(0.3f);
 
@@ -175,6 +184,8 @@ void Engine::Run() {
         // jeep->transform.rotation = glm::vec3(0, glm::pi<float>() + current_time, 0);
         // jeep->transform.position = 5.0f * glm::vec3(glm::sin(current_time), 0, glm::cos(current_time));
         suzanne->transform.rotation = {0, current_time, 0};
+
+		raptor->transform.rotation = {current_time, 0, glm::pi<float>() + current_time};
 
         Render();
 
