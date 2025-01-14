@@ -122,6 +122,9 @@ void Engine::Run() {
     float last_time = 0.0f;
 
     // load meshes
+    Mesh* mesh_face;
+    if (!LoadMesh(mesh_face, "./assets/pack/face.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/pack/face.png")) return;
+
     Mesh* mesh_jeep;
     if (!LoadMesh(mesh_jeep, "./assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/jeep.jpg")) return;
 
@@ -134,16 +137,17 @@ void Engine::Run() {
     Mesh* mesh_suzanne;
     if (!LoadMesh(mesh_suzanne, "./assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
-    Mesh* mesh_raptor;
-    if (!LoadMesh(mesh_raptor, "./assets/raptor.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    // Mesh* mesh_raptor;
+    // if (!LoadMesh(mesh_raptor, "./assets/raptor.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
-    Mesh* mesh_tank;
-    if (!LoadMesh(mesh_tank, "./assets/tank.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    // Mesh* mesh_tank;
+    // if (!LoadMesh(mesh_tank, "./assets/tank.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // create objects
+    GameObject* face = scene.AddGameObject(new GameObject(mesh_face));
     GameObject* jeep = scene.AddGameObject(new GameObject(mesh_jeep));
-    GameObject* raptor = scene.AddGameObject(new GameObject(mesh_raptor, {125, 125, 125}));
-    GameObject* tank = scene.AddGameObject(new GameObject(mesh_tank, {125, 125, 125}));
+    // GameObject* raptor = scene.AddGameObject(new GameObject(mesh_raptor, {125, 125, 125}));
+    // GameObject* tank = scene.AddGameObject(new GameObject(mesh_tank, {125, 125, 125}));
     GameObject* starship = scene.AddGameObject(new GameObject(mesh_starship));
     GameObject* suzanne = scene.AddGameObject(new GameObject(mesh_suzanne, {0.5f, 0, 0.4f}));
     GameObject* ground = scene.AddGameObject(new GameObject(mesh_cube, {0.3f, 0.3f, 0.3f}));
@@ -152,11 +156,11 @@ void Engine::Run() {
     jeep->transform.position = {40.0f, 0.15f, 0};
     jeep->transform.rotation = {0, glm::pi<float>() * 0.2f, 0};
 
-    raptor->transform.position = {20.0f, 1.0f, 0};
-    raptor->transform.rotation = {0, 0, glm::pi<float>()};
+    // raptor->transform.position = {20.0f, 1.0f, 0};
+    // raptor->transform.rotation = {0, 0, glm::pi<float>()};
 
-    tank->transform.position = {20.0f, 1.2f, 0};
-    tank->transform.rotation = {0, 0, 0};
+    // tank->transform.position = {20.0f, 1.2f, 0};
+    // tank->transform.rotation = {0, 0, 0};
 
     starship->transform.scale = glm::vec3(0.3f);
 
@@ -185,7 +189,7 @@ void Engine::Run() {
         // jeep->transform.position = 5.0f * glm::vec3(glm::sin(current_time), 0, glm::cos(current_time));
         suzanne->transform.rotation = {0, current_time, 0};
 
-		raptor->transform.rotation = {current_time, 0, glm::pi<float>() + current_time};
+		// raptor->transform.rotation = {current_time, 0, glm::pi<float>() + current_time};
 
         Render();
 
