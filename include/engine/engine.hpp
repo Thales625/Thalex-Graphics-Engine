@@ -12,6 +12,7 @@ public:
 
     bool Init();
     void Run();
+    void ImGuiRender();
 
     bool LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path);
     bool LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path); // without texture

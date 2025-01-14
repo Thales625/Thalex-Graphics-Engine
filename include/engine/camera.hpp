@@ -7,14 +7,15 @@
 class Camera {
 public:
     Camera();
-    Camera(glm::vec3 new_pos);
-    Camera(glm::vec3 new_pos, float yaw, float pitch);
+    Camera(const glm::vec3 new_pos);
+    Camera(const glm::vec3 new_pos, const float yaw, const float pitch);
     
-    void SetPosition(glm::vec3 new_pos) { position = new_pos; UpdateCameraVectors(); };
+    glm::vec3 GetPosition() const { return this->position; };
+    void SetPosition(const glm::vec3 new_pos) { position = new_pos; UpdateCameraVectors(); };
 
     glm::mat4 GetViewMatrix() const;
-    void ProcessKeyboardInput(Window* window, float delta_time);
-    void ProcessMouseMovement(Window* window, float delta_time);
+    void ProcessKeyboardInput(Window* const window, const float delta_time);
+    void ProcessMouseMovement(Window* const window, const float delta_time);
 
     float mouse_sensitivity = 5.0f;
     float camera_speed = 5.0f;

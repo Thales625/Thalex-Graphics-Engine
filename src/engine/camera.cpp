@@ -1,15 +1,16 @@
 #include "engine/camera.hpp"
 #include "engine/window.hpp"
+#include <GLFW/glfw3.h>
 
 Camera::Camera() : position(glm::vec3(0)), yaw(0), pitch(0) {
     UpdateCameraVectors();
 }
 
-Camera::Camera(glm::vec3 new_pos) : position(new_pos), yaw(0), pitch(0) {
+Camera::Camera(const glm::vec3 new_pos) : position(new_pos), yaw(0), pitch(0) {
     UpdateCameraVectors();
 }
 
-Camera::Camera(glm::vec3 new_pos, float yaw, float pitch) : position(new_pos), yaw(yaw), pitch(pitch) {
+Camera::Camera(const glm::vec3 new_pos, const float yaw, const float pitch) : position(new_pos), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
 }
 
@@ -40,14 +41,11 @@ void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     if (window->GetKey(GLFW_KEY_C, GLFW_PRESS)) {
         position -= world_up * speed;
     }
-
-    // others
-    if (window->GetKey(GLFW_KEY_Q, GLFW_PRESS)) {
-        window->SetShouldClose(true);
-    }
 }
 
-void Camera::ProcessMouseMovement(Window* window, float delta_time) {
+void Camera::ProcessMouseMovement(Window* const window, const float delta_time) {
+    if (window->GetInputMode() != GLFW_CURSOR_DISABLED) return;
+
     double mouse_x0 = mouse_x;
     double mouse_y0 = mouse_y;
 

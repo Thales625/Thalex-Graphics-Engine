@@ -3,6 +3,11 @@
 #include "utils/utils.hpp"
 #include "engine/game_object.hpp"
 
+// IMGUI
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 #include <cstdlib>
 #include <glm/fwd.hpp>
 #include <iostream>
@@ -22,7 +27,7 @@ Engine::Engine(uint32_t width, uint32_t height, const std::string& title) : wind
 // deconstructor
 Engine::~Engine() {
     // free gameobjects
-    for (auto& object : scene.GetGameObjects()) {
+    for (auto& object : this->scene.GetGameObjects()) {
         delete object;
     }
     
@@ -32,12 +37,12 @@ Engine::~Engine() {
     }
 
     // free window
-    delete window;
+    delete this->window;
 }
 
 // init engine (OpenGL, GLFW, etc)
 bool Engine::Init() {
-    if (!window->Init()) {
+    if (!this->window->Init()) {
         std::cerr << "Failed to initialize window!" << std::endl;
         return false;
     }
@@ -144,13 +149,13 @@ void Engine::Run() {
     // if (!LoadMesh(mesh_tank, "./assets/tank.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // create objects
-    GameObject* face = scene.AddGameObject(new GameObject(mesh_face));
-    GameObject* jeep = scene.AddGameObject(new GameObject(mesh_jeep));
-    // GameObject* raptor = scene.AddGameObject(new GameObject(mesh_raptor, {125, 125, 125}));
-    // GameObject* tank = scene.AddGameObject(new GameObject(mesh_tank, {125, 125, 125}));
-    GameObject* starship = scene.AddGameObject(new GameObject(mesh_starship));
-    GameObject* suzanne = scene.AddGameObject(new GameObject(mesh_suzanne, {0.5f, 0, 0.4f}));
-    GameObject* ground = scene.AddGameObject(new GameObject(mesh_cube, {0.3f, 0.3f, 0.3f}));
+    GameObject* face = this->scene.AddGameObject(new GameObject(mesh_face));
+    GameObject* jeep = this->scene.AddGameObject(new GameObject(mesh_jeep));
+    // GameObject* raptor = this->scene.AddGameObject(new GameObject(mesh_raptor, {125, 125, 125}));
+    // GameObject* tank = this->scene.AddGameObject(new GameObject(mesh_tank, {125, 125, 125}));
+    GameObject* starship = this->scene.AddGameObject(new GameObject(mesh_starship));
+    GameObject* suzanne = this->scene.AddGameObject(new GameObject(mesh_suzanne, {0.5f, 0, 0.4f}));
+    GameObject* ground = this->scene.AddGameObject(new GameObject(mesh_cube, {0.3f, 0.3f, 0.3f}));
 
     // transform
     jeep->transform.position = {40.0f, 0.15f, 0};
@@ -171,36 +176,62 @@ void Engine::Run() {
     ground->transform.scale = {50.0f, 0.1f, 50.0f};
 
     // move camera
-    scene.GetCamera()->SetPosition({40.0f, 0, 0});
+    this->scene.GetCamera()->SetPosition({40.0f, 0, 0});
 
     // main loop
-    while (!window->GetShouldClose()) {
-        current_time = static_cast<float>(glfwGetTime());
-        delta_time = current_time - last_time;
-        last_time = current_time;
+    while (!this->window->GetShouldClose()) {
+        this->current_time = static_cast<float>(glfwGetTime());
+        this->delta_time = this->current_time - last_time;
+        last_time = this->current_time;
 
-        scene.GetCamera()->ProcessKeyboardInput(window, delta_time);
-        scene.GetCamera()->ProcessMouseMovement(window, delta_time);
+        this->scene.GetCamera()->ProcessKeyboardInput(this->window, this->delta_time);
+        this->scene.GetCamera()->ProcessMouseMovement(this->window, this->delta_time);
 
-        scene.Update(delta_time, current_time);
+        this->scene.Update(this->delta_time, this->current_time);
 
         // specific updates
-        // jeep->transform.rotation = glm::vec3(0, glm::pi<float>() + current_time, 0);
-        // jeep->transform.position = 5.0f * glm::vec3(glm::sin(current_time), 0, glm::cos(current_time));
-        suzanne->transform.rotation = {0, current_time, 0};
+        // jeep->transform.rotation = glm::vec3(0, glm::pi<float>() + this->current_time, 0);
+        // jeep->transform.position = 5.0f * glm::vec3(glm::sin(this->current_time), 0, glm::cos(this->current_time));
+        suzanne->transform.rotation = {0, this->current_time, 0};
 
-		// raptor->transform.rotation = {current_time, 0, glm::pi<float>() + current_time};
+		// raptor->transform.rotation = {this->current_time, 0, glm::pi<float>() + this->current_time};
 
-        Render();
-
-        window->SwapBuffers();
-        window->PollEvents();
+        this->window->PollEvents();
+        this->Render();
+        this->ImGuiRender();
+        this->window->SwapBuffers();
     }
 }
 
-// render scene
+// render this->scene
 void Engine::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scene.Render(window);
+    this->scene.Render(this->window);
+}
+
+void Engine::ImGuiRender() {
+    // update ImGui
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    // ImGui Window
+    ImGui::Begin("Thalex Graphics Engine");
+
+    // performance info
+    ImGui::SeparatorText("Performance Info");
+    ImGui::Text("current time: %.2f s", this->current_time);
+    ImGui::Text("delta time: %.2f ms", this->delta_time*100);
+    ImGui::Text("fps: %.2f", 1/this->delta_time);
+
+    // camera settings
+    ImGui::SeparatorText("Camera Settings");
+    ImGui::SliderFloat("Speed", &this->scene.GetCamera()->camera_speed, 0.1f, 10.0f, "Speed = %.1f");
+
+    ImGui::End();
+
+    // render ImGui
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
