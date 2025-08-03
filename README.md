@@ -1,58 +1,25 @@
 # ThaleX Graphics Engine
 
-ThaleX Graphics Engine é uma engine gráfica em desenvolvimento usando C++ e OpenGL. O objetivo da ThaleX é fornecer uma base sólida para criar gráficos 3D de alto desempenho e flexíveis. Esta engine faz uso de bibliotecas como GLFW para gerenciamento de janelas, GLM para matemática vetorial e matriz, e GLAD para carregamento de extensões OpenGL.
+This is a graphics engine under development using C++ and OpenGL. Its goal is to provide a solid foundation for creating high-performance and flexible 3D graphics. This engine makes use of libraries such as GLFW for window management, GLM for vector and matrix mathematics, and GLAD for OpenGL extension loading.
 
-## Recursos
+## Features
 
-- **Renderização:**
-  - Suporte básico para renderização de objetos 3D.
-  - Configuração inicial para adicionar novas técnicas de renderização.
+- **Rendering:**
+  - Basic support for rendering 3D objects.
+  - Initial setup for adding new rendering techniques.
 
-- **Câmera:**
-  - Movimento básico da câmera com controles para ajustes de visualização.
-  - Planejamento para melhorias no movimento e na configuração da câmera.
+- **Camera:**
+  - Basic camera movement with controls for view adjustments.
+  - Plans for improvements in movement and camera configuration.
 
-## Instalação
+## Usage
 
-Para começar a usar o ThaleX Graphics Engine, você precisa ter o [CMake](https://cmake.org/install/) e as dependências necessárias instaladas. Siga as etapas abaixo:
+After building, you can run the application located at `./bin/app`. The engine currently supports basic 3D object rendering and has preliminary functionality for camera control.
 
-1. Clone o repositório:
-   ```sh
-   git clone https://github.com/Thales625/Thalex-Graphics-Engine.git
-   cd thalex-graphics-engine
-   ```
+## Contribution
 
-2. Crie um diretório de construção e navegue até ele:
-   ```sh
-   mkdir build
-   cd build
-   ```
+Contributions are welcome! If you want to help improve the engine, please fork the repository and submit a pull request with your improvements or fixes.
 
-3. Execute o CMake para gerar os arquivos de construção:
-   ```sh
-   cmake ..
-   ```
+## Contact
 
-4. Compile o projeto:
-   ```sh
-   make
-   ```
-
-5. Execute o aplicativo:
-   ```sh
-   ./bin/app
-   ```
-
-## Uso
-
-Após a construção, você pode executar o aplicativo localizado em `./bin/app`. A engine atualmente suporta a renderização básica de objetos 3D e possui funcionalidades preliminares para controle de câmera.
-
-## ToDo
-
-## Contribuição
-
-Contribuições são bem-vindas! Se você quiser ajudar a melhorar a ThaleX Graphics Engine, por favor, faça um fork do repositório e envie um pull request com suas melhorias ou correções.
-
-## Contato
-
-Para mais informações ou perguntas, você pode entrar em contato com [thaleshend@gmail.com](mailto:thaleshend@gmail.com).
+For more information or questions, you can contact [thaleshend@gmail.com](mailto:thaleshend@gmail.com).

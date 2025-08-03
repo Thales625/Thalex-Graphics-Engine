@@ -72,7 +72,7 @@ bool Engine::LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const s
     // TODO: check if mesh is loaded -> model loader
 
     // texture
-    unsigned int texture_id = LoadTexture(texture_path);
+    const unsigned int texture_id = LoadTexture(texture_path);
 
     if (texture_id) {
         std::cout << "Loaded texture: " << texture_path << std::endl;
@@ -128,25 +128,25 @@ void Engine::Run() {
 
     // load meshes
     Mesh* mesh_face;
-    if (!LoadMesh(mesh_face, "./assets/pack/face.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/pack/face.png")) return;
+    if (!this->LoadMesh(mesh_face, "./assets/pack/face.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/pack/face.png")) return;
 
     Mesh* mesh_jeep;
-    if (!LoadMesh(mesh_jeep, "./assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/jeep.jpg")) return;
+    if (!this->LoadMesh(mesh_jeep, "./assets/jeep.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/jeep.jpg")) return;
 
     Mesh* mesh_starship;
-    if (!LoadMesh(mesh_starship, "./assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/starship.png")) return;
+    if (!this->LoadMesh(mesh_starship, "./assets/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "./assets/starship.png")) return;
 
     Mesh* mesh_cube;
-    if (!LoadMesh(mesh_cube, "./assets/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!this->LoadMesh(mesh_cube, "./assets/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     Mesh* mesh_suzanne;
-    if (!LoadMesh(mesh_suzanne, "./assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!this->LoadMesh(mesh_suzanne, "./assets/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // Mesh* mesh_raptor;
-    // if (!LoadMesh(mesh_raptor, "./assets/raptor.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    // if (!this->LoadMesh(mesh_raptor, "./assets/raptor.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // Mesh* mesh_tank;
-    // if (!LoadMesh(mesh_tank, "./assets/tank.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    // if (!this->LoadMesh(mesh_tank, "./assets/tank.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // create objects
     GameObject* face = this->scene.AddGameObject(new GameObject(mesh_face));
@@ -190,11 +190,7 @@ void Engine::Run() {
         this->scene.Update(this->delta_time, this->current_time);
 
         // specific updates
-        // jeep->transform.rotation = glm::vec3(0, glm::pi<float>() + this->current_time, 0);
-        // jeep->transform.position = 5.0f * glm::vec3(glm::sin(this->current_time), 0, glm::cos(this->current_time));
         suzanne->transform.rotation = {0, this->current_time, 0};
-
-		// raptor->transform.rotation = {this->current_time, 0, glm::pi<float>() + this->current_time};
 
         this->window->PollEvents();
         this->Render();
@@ -204,7 +200,7 @@ void Engine::Run() {
 }
 
 // render this->scene
-void Engine::Render() {
+void Engine::Render() const {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     this->scene.Render(this->window);
@@ -227,7 +223,7 @@ void Engine::ImGuiRender() {
 
     // camera settings
     ImGui::SeparatorText("Camera Settings");
-    ImGui::SliderFloat("Speed", &this->scene.GetCamera()->camera_speed, 0.1f, 10.0f, "Speed = %.1f");
+    ImGui::SliderFloat("Speed", &this->scene.GetCamera()->camera_speed, 0.1f, 10.0f, "%.1f m/s");
 
     ImGui::End();
 

@@ -7,7 +7,7 @@
 
 class GameObject {
 public:
-    GameObject(Mesh* mesh_ptr, glm::vec3 new_color = {0, 0, 0});
+    GameObject(Mesh* mesh_ptr, const glm::vec3 n_color = {0, 0, 0});
 
     Transform transform; // position, rotation, scale
     glm::vec3 color;

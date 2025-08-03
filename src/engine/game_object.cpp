@@ -1,6 +1,6 @@
 #include "engine/game_object.hpp"
 
-GameObject::GameObject(Mesh* mesh_ptr, glm::vec3 new_color) : color(new_color), name("Unnamed GameObject"), mesh(mesh_ptr) {}
+GameObject::GameObject(Mesh* mesh_ptr, const glm::vec3 n_color) : color(n_color), name("Unnamed GameObject"), mesh(mesh_ptr) {}
 
 // Update the GameObject
 void GameObject::Update(const float delta_time, const float current_time) {

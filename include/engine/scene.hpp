@@ -11,9 +11,9 @@ public:
 
     glm::vec3 sun_dir;
 
-    glm::mat4 GetProjectionMatrix(Window* window) const;
+    glm::mat4 GetProjectionMatrix(Window* const window) const;
 
-    void Render(Window* window) const;
+    void Render(Window* const window) const;
 
     void Update(const float delta_time, const float current_time);
 

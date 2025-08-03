@@ -1,5 +1,6 @@
 #include "engine/camera.hpp"
 #include "engine/window.hpp"
+#include "imgui/imgui.h"
 #include <GLFW/glfw3.h>
 
 Camera::Camera() : position(glm::vec3(0)), yaw(0), pitch(0) {
@@ -19,6 +20,8 @@ glm::mat4 Camera::GetViewMatrix() const {
 }
 
 void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
+    if (ImGui::GetIO().WantCaptureKeyboard) return;
+
     // movement
     const float speed = camera_speed * delta_time;
 
@@ -44,7 +47,7 @@ void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
 }
 
 void Camera::ProcessMouseMovement(Window* const window, const float delta_time) {
-    if (window->GetInputMode() != GLFW_CURSOR_DISABLED) return;
+    if (window->GetInputMode() != GLFW_CURSOR_DISABLED || ImGui::GetIO().WantCaptureKeyboard) return;
 
     double mouse_x0 = mouse_x;
     double mouse_y0 = mouse_y;
