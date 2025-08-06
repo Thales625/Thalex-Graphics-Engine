@@ -43,6 +43,7 @@ bool Engine::Init() {
         return false;
     }
 
+    glfwSwapInterval(1); // limit fps
     glEnable(GL_DEPTH_TEST);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
@@ -127,38 +128,40 @@ void Engine::Run() {
     #define FRAGMENT_NO_TEX_SHADER_FILE "assets/shaders/fragment_no_tex.glsl"
 
     // load meshes
-    Mesh* mesh_starship;
-    if (!this->LoadMesh(mesh_starship, "assets/models/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/starship.png")) return;
-
-    Mesh* mesh_penguin;
-    if (!this->LoadMesh(mesh_penguin, "assets/models/penguin.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/penguin.png")) return;
-
     Mesh* mesh_cube;
-    if (!this->LoadMesh(mesh_cube, "assets/models/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    if (!this->LoadMesh(mesh_cube, "assets/models/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/terrain.jpg")) return;
 
-    Mesh* mesh_bunny;
-    if (!this->LoadMesh(mesh_bunny, "assets/models/bunny.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    Mesh* mesh_engine;
+    if (!this->LoadMesh(mesh_engine, "assets/models/engine.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
-    Mesh* mesh_suzanne;
-    if (!this->LoadMesh(mesh_suzanne, "assets/models/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    Mesh* mesh_rocket;
+    if (!this->LoadMesh(mesh_rocket, "assets/models/rocket.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/rocket.png")) return;
 
     // create objects
-    GameObject* starship = this->scene.AddGameObject(new GameObject(mesh_starship));
-    GameObject* penguin = this->scene.AddGameObject(new GameObject(mesh_penguin));
-    GameObject* cube = this->scene.AddGameObject(new GameObject(mesh_cube));
-    GameObject* bunny = this->scene.AddGameObject(new GameObject(mesh_bunny));
-    GameObject* suzanne = this->scene.AddGameObject(new GameObject(mesh_suzanne));
+    GameObject* terrain = this->scene.AddGameObject(new GameObject(mesh_cube));
+    GameObject* engine = this->scene.AddGameObject(new GameObject(mesh_engine));
+    GameObject* rocket = this->scene.AddGameObject(new GameObject(mesh_rocket));
 
-    // move camera
-    this->scene.GetCamera()->SetPosition({0, 0, 0});
+    // rocket
+    rocket->transform.position.y = 5.0f;
+
+    // engine
+    engine->transform.position.y = rocket->transform.position.y + 1.125f;
+
+    // scale
+    // rocket->transform.scale = glm::vec3(1.5f);
+    // engine->transform.scale = glm::vec3(1.5f);
+
+    // camera
+    Camera* camera = this->scene.GetCamera();
+
+    camera->mouse_sensitivity = 40.0f;
+
+    camera->SetPosition({0, 0, 0});
 
     // setup game objects
-    cube->transform.position.x = -2.0f;
-
-    bunny->transform.position.x = 2.0f;
-    bunny->transform.rotation.x = glm::radians(90.0f);
-
-    suzanne->transform.position.y = 4.0f;
+    terrain->transform.scale.x = terrain->transform.scale.z = 50.0f;
+    terrain->transform.scale.y = 0.1f;
 
     // main loop
     while (!this->window->GetShouldClose()) {
@@ -166,10 +169,13 @@ void Engine::Run() {
         this->delta_time = this->current_time - last_time;
         last_time = this->current_time;
 
-        this->scene.GetCamera()->ProcessKeyboardInput(this->window, this->delta_time);
-        this->scene.GetCamera()->ProcessMouseMovement(this->window, this->delta_time);
+        camera->ProcessKeyboardInput(this->window, this->delta_time);
+        camera->ProcessMouseMovement(this->window, this->delta_time);
 
         this->scene.Update(this->delta_time, this->current_time);
+
+        engine->transform.rotation.x = glm::radians(20.0f) * glm::sin(this->current_time);
+        engine->transform.rotation.z = glm::radians(20.0f) * glm::cos(this->current_time);
 
         this->window->PollEvents();
         this->Render();
@@ -203,6 +209,7 @@ void Engine::ImGuiRender() {
     // camera settings
     ImGui::SeparatorText("Camera Settings");
     ImGui::SliderFloat("Speed", &this->scene.GetCamera()->camera_speed, 0.1f, 10.0f, "%.1f m/s");
+    ImGui::SliderFloat("Sensitivity", &this->scene.GetCamera()->mouse_sensitivity, 0.1f, 100.0f, "%.1f");
 
     ImGui::End();
 

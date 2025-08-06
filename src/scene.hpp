@@ -17,10 +17,10 @@ public:
 
     void Update(const float delta_time, const float current_time);
 
-    GameObject* AddGameObject(GameObject* game_obj_ptr) { game_objects.push_back(game_obj_ptr); return game_obj_ptr; };
-    std::vector<GameObject*> GetGameObjects() const { return game_objects; };
+    inline GameObject* AddGameObject(GameObject* game_obj_ptr) { game_objects.push_back(game_obj_ptr); return game_obj_ptr; };
+    inline std::vector<GameObject*> GetGameObjects() const { return game_objects; };
 
-    Camera* GetCamera() { return &camera; };
+    inline Camera* GetCamera() { return &camera; };
 
 private:
     Camera camera;
