@@ -17,7 +17,7 @@ public:
     void ProcessKeyboardInput(Window* const window, const float delta_time);
     void ProcessMouseMovement(Window* const window, const float delta_time);
 
-    float mouse_sensitivity = 50.0f;
+    float mouse_sensitivity = 10.0f;
     float camera_speed = 5.0f;
 
 private:

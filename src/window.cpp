@@ -44,7 +44,7 @@ bool Window::Init() {
     ImGui_ImplOpenGL3_Init();
 
     // init glad
-    if (!gladLoadGL(glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD!" << std::endl;
         return false;
     }

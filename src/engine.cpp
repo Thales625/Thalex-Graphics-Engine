@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "GLFW/glfw3.h"
 #include "mesh.hpp"
 #include "utils.hpp"
 #include "game_object.hpp"
@@ -9,17 +10,12 @@
 
 #include <glm/fwd.hpp>
 
-#include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>
 
 // #define WIREFRAME
-
-#define VERTEX_SHADER_FILE "assets/shaders/vertex.glsl"
-#define FRAGMENT_SHADER_FILE "assets/shaders/fragment.glsl"
-#define FRAGMENT_NO_TEX_SHADER_FILE "assets/shaders/fragment_no_tex.glsl"
 
 // constructor
 Engine::Engine(uint32_t width, uint32_t height, const std::string& title) : window(new Window(width, height, title)) {}
@@ -69,7 +65,7 @@ bool Engine::Init() {
 }
 
 bool Engine::LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path) {
-    // TODO: check if mesh is loaded -> model loader
+    // TODO: check if mesh is loaded -> mesh loader
 
     // texture
     const unsigned int texture_id = LoadTexture(texture_path);
@@ -126,21 +122,43 @@ bool Engine::LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const s
 void Engine::Run() {
     float last_time = 0.0f;
 
+    #define VERTEX_SHADER_FILE "assets/shaders/vertex.glsl"
+    #define FRAGMENT_SHADER_FILE "assets/shaders/fragment.glsl"
+    #define FRAGMENT_NO_TEX_SHADER_FILE "assets/shaders/fragment_no_tex.glsl"
+
     // load meshes
-    Mesh* mesh_skull;
-    if (!this->LoadMesh(mesh_skull, "assets/models/skull.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/wood.jpg")) return;
-    // if (!this->LoadMesh(mesh_skull, "assets/models/skull.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+    Mesh* mesh_starship;
+    if (!this->LoadMesh(mesh_starship, "assets/models/starship.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/starship.png")) return;
+
+    Mesh* mesh_penguin;
+    if (!this->LoadMesh(mesh_penguin, "assets/models/penguin.obj", VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE, "assets/textures/penguin.png")) return;
+
+    Mesh* mesh_cube;
+    if (!this->LoadMesh(mesh_cube, "assets/models/cube.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+
+    Mesh* mesh_bunny;
+    if (!this->LoadMesh(mesh_bunny, "assets/models/bunny.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
+
+    Mesh* mesh_suzanne;
+    if (!this->LoadMesh(mesh_suzanne, "assets/models/suzanne.obj", VERTEX_SHADER_FILE, FRAGMENT_NO_TEX_SHADER_FILE)) return;
 
     // create objects
-    GameObject* skull = this->scene.AddGameObject(new GameObject(mesh_skull));
-
-    // transform
-    // ->transform.position = {40.0f, 1.0f, 3.0f};
-    // ->transform.rotation = {0, glm::pi<float>()*0.5f, 0};
-    // ->transform.scale = glm::vec3(0.5f);
+    GameObject* starship = this->scene.AddGameObject(new GameObject(mesh_starship));
+    GameObject* penguin = this->scene.AddGameObject(new GameObject(mesh_penguin));
+    GameObject* cube = this->scene.AddGameObject(new GameObject(mesh_cube));
+    GameObject* bunny = this->scene.AddGameObject(new GameObject(mesh_bunny));
+    GameObject* suzanne = this->scene.AddGameObject(new GameObject(mesh_suzanne));
 
     // move camera
     this->scene.GetCamera()->SetPosition({0, 0, 0});
+
+    // setup game objects
+    cube->transform.position.x = -2.0f;
+
+    bunny->transform.position.x = 2.0f;
+    bunny->transform.rotation.x = glm::radians(90.0f);
+
+    suzanne->transform.position.y = 4.0f;
 
     // main loop
     while (!this->window->GetShouldClose()) {
@@ -152,9 +170,6 @@ void Engine::Run() {
         this->scene.GetCamera()->ProcessMouseMovement(this->window, this->delta_time);
 
         this->scene.Update(this->delta_time, this->current_time);
-
-        // specific updates
-        // ->transform.rotation = {0, this->current_time, 0};
 
         this->window->PollEvents();
         this->Render();
