@@ -19,7 +19,7 @@ public:
     void Update(const float delta_time, const float current_time);
 
     // render the object
-    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection, glm::vec3 sun_dir);
+    void Render(glm::mat4 m_model, glm::mat4 m_view, glm::mat4 m_projection);
 
 private:
     std::string name;

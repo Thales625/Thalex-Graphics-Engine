@@ -4,16 +4,13 @@
 
 #include <glm/fwd.hpp>
 
-Scene::Scene() : sun_dir({0, 1, 0}) { }
+Scene::Scene() {}
 
 // update all objects in the scene
 void Scene::Update(const float delta_time, const float current_time) {
-    // sun_dir = glm::vec3(0, glm::cos(current_time), glm::sin(current_time));
-    sun_dir = glm::normalize(glm::vec3(0, 2+glm::cos(current_time), glm::sin(current_time)));
-
     // update each object
-    for (const auto& object : game_objects) {
-        object->Update(delta_time, current_time);
+    for (const auto& vessel : this->vessels) {
+        vessel->Update(delta_time, current_time);
     }
 } 
 
@@ -23,19 +20,23 @@ void Scene::Render(Window* const window) const {
     glm::mat4 m_view = camera.GetViewMatrix();
     glm::mat4 m_projection = GetProjectionMatrix(window);
 
-    for (const auto& object : game_objects) {
-        m_model = glm::translate(glm::mat4(1.0f), object->transform.position);
-        m_model = glm::rotate(m_model, object->transform.rotation.y, {0.0f, 1.0f, 0.0f}); // yaw
-        m_model = glm::rotate(m_model, object->transform.rotation.x, {1.0f, 0.0f, 0.0f}); // pitch
-        m_model = glm::rotate(m_model, object->transform.rotation.z, {0.0f, 0.0f, 1.0f}); // roll
-        m_model = glm::scale(m_model, object->transform.scale);
+    for (const auto& vessel : this->vessels) {
+        m_model = glm::translate(glm::mat4(1.0f), vessel->transform.position);
+        m_model = glm::rotate(m_model, vessel->transform.rotation.x, {1.0f, 0.0f, 0.0f}); // pitch
+        m_model = glm::rotate(m_model, vessel->transform.rotation.y, {0.0f, 1.0f, 0.0f}); // yaw
+        m_model = glm::rotate(m_model, vessel->transform.rotation.z, {0.0f, 0.0f, 1.0f}); // roll
+        m_model = glm::scale(m_model, vessel->transform.scale);
 
-        object->Render(m_model, m_view, m_projection, sun_dir);
+        vessel->Render(m_model, m_view, m_projection);
     }
+
+    m_model = glm::translate(glm::mat4(1.0f), this->terrain->transform.position);
+    m_model = glm::scale(m_model, this->terrain->transform.scale);
+    this->terrain->Render(m_model, m_view, m_projection);
 }
 
 glm::mat4 Scene::GetProjectionMatrix(Window* const window) const {
     int width, height;
     window->GetFrameBufferSize(&width, &height);
-    return glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+    return glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 1000.0f);
 }

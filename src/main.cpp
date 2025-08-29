@@ -1,10 +1,10 @@
-#include "engine.hpp"
+#include "universe.hpp"
 
 int main() {
-    Engine engine = Engine(800, 600, "ThaleX Graphics Engine");
+    Universe universe = Universe(800, 600, "Rocket Landing");
 
-    if (engine.Init()) {
-        engine.Run();
+    if (universe.Init()) {
+        universe.Run();
     }
 
     return 0;

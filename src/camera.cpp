@@ -8,42 +8,38 @@ Camera::Camera() : position(glm::vec3(0)), yaw(0), pitch(0) {
     UpdateCameraVectors();
 }
 
-Camera::Camera(const glm::vec3 new_pos) : position(new_pos), yaw(0), pitch(0) {
+Camera::Camera(const glm::vec3 n_pos) : position(n_pos), yaw(0), pitch(0) {
     UpdateCameraVectors();
 }
 
-Camera::Camera(const glm::vec3 new_pos, const float yaw, const float pitch) : position(new_pos), yaw(yaw), pitch(pitch) {
+Camera::Camera(const glm::vec3 n_pos, const float yaw, const float pitch) : position(n_pos), yaw(yaw), pitch(pitch) {
     UpdateCameraVectors();
-}
-
-glm::mat4 Camera::GetViewMatrix() const {
-    return glm::lookAt(position, position + front, up);
 }
 
 void Camera::ProcessKeyboardInput(Window* window, float delta_time) {
     if (ImGui::GetIO().WantCaptureKeyboard) return;
 
     // movement
-    const float speed = camera_speed * delta_time;
+    const float s = speed * delta_time;
 
     if (window->GetKey(GLFW_KEY_W, GLFW_PRESS)) {
-        position += front * speed;
+        position += front * s;
     }
     if (window->GetKey(GLFW_KEY_S, GLFW_PRESS)) {
-        position -= front * speed;
+        position -= front * s;
     }
     if (window->GetKey(GLFW_KEY_A, GLFW_PRESS)) {
-        position -= right * speed;
+        position -= right * s;
     }
     if (window->GetKey(GLFW_KEY_D, GLFW_PRESS)) {
-        position += right * speed;
+        position += right * s;
     }
 
     if (window->GetKey(GLFW_KEY_SPACE, GLFW_PRESS)) {
-        position += world_up * speed;
+        position += world_up * s;
     }
     if (window->GetKey(GLFW_KEY_C, GLFW_PRESS)) {
-        position -= world_up * speed;
+        position -= world_up * s;
     }
 }
 
@@ -55,8 +51,8 @@ void Camera::ProcessMouseMovement(Window* const window, const float delta_time) 
 
     window->GetCursorPos(&mouse_x, &mouse_y);
 
-    yaw   += (mouse_x - mouse_x0)*mouse_sensitivity*delta_time;
-    pitch -= (mouse_y - mouse_y0)*mouse_sensitivity*delta_time;
+    yaw   += (mouse_x - mouse_x0)*sensitivity*delta_time;
+    pitch -= (mouse_y - mouse_y0)*sensitivity*delta_time;
 
     // clamp pitch
     if (pitch > 89.0f) pitch = 89.0f;

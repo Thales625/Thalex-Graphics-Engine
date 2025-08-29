@@ -1,31 +1,17 @@
 #pragma once
 
-#include "window.hpp"
-#include "scene.hpp"
+#include "transform.hpp"
+#include "mesh.hpp"
 
 class Engine {
 public:
-    Engine(uint32_t width, uint32_t height, const std::string& title);
-    ~Engine();
+    Engine(Mesh* mesh_ptr, float max_gimbal_angle);
 
-    float current_time, delta_time;
+    Transform transform; // position, rotation, scale
 
-    bool Init();
-    void Run();
-
-    bool LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path, const std::string& texture_path);
-    bool LoadMesh(Mesh*& mesh_ptr, const std::string& obj_file_path, const std::string& vertex_shader_path, const std::string& fragment_shader_path); // without texture
-
-    std::vector<Mesh*> GetMeshes() const { return meshes; };
-
+    void Update();
+    inline void Render(const glm::mat4 m_model, const glm::mat4 m_view, const glm::mat4 m_projection) { mesh->Render(m_model, m_view, m_projection); }; 
 private:
-    Window* window;
-    Scene scene;
-
-    std::vector<Mesh*> meshes;
-
-    void Update(const float delta_time);
-
-    void Render() const;
-    void ImGuiRender();
+    Mesh* mesh;
+    float max_angle;
 };

@@ -2,7 +2,7 @@
 
 #include "utils.hpp"
 
-#include "glad/glad.h"
+#include <glad/glad.h>
 
 #include <iostream>
 
@@ -57,20 +57,4 @@ Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
-}
-
-void Shader::SetUniform(const std::string name, const glm::vec3 value) {
-    glUniform3fv(glGetUniformLocation(shader_program, name.c_str()), 1, glm::value_ptr(value));
-}
-
-void Shader::SetUniform(const std::string name, const glm::mat4 value) {
-    glUniformMatrix4fv(glGetUniformLocation(shader_program, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
-}
-
-void Shader::SetUniform(const std::string name, const int value) {
-    glUniform1i(glGetUniformLocation(shader_program, name.c_str()), value);
-}
-
-void Shader::Use() {
-    glUseProgram(shader_program);
 }

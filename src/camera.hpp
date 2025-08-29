@@ -10,15 +10,15 @@ public:
     Camera(const glm::vec3 new_pos);
     Camera(const glm::vec3 new_pos, const float yaw, const float pitch);
     
-    glm::vec3 GetPosition() const { return this->position; };
-    void SetPosition(const glm::vec3 new_pos) { position = new_pos; UpdateCameraVectors(); };
+    inline glm::vec3 GetPosition() const { return this->position; };
+    inline void SetPosition(const glm::vec3 new_pos) { position = new_pos; UpdateCameraVectors(); };
 
-    glm::mat4 GetViewMatrix() const;
+    inline glm::mat4 GetViewMatrix() const { return glm::lookAt(position, position + front, up); };
     void ProcessKeyboardInput(Window* const window, const float delta_time);
     void ProcessMouseMovement(Window* const window, const float delta_time);
 
-    float mouse_sensitivity = 10.0f;
-    float camera_speed = 5.0f;
+    float sensitivity = 10.0f;
+    float speed = 5.0f;
 
 private:
     glm::vec3 position;
